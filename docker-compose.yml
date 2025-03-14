@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  fastapi-app:
+    build: .
+    container_name: fastapi-app
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    environment:
+      ENVIRONMENT: local
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: mydatabase
+      POSTGRES_SERVER: postgres
+      POSTGRES_PORT: 5432
+      JWT_SECRET_KEY: secret
+      JWT_ALGORITHM: HS256
+      JWT_EXPIRATION: 3600
+    volumes:
+      - ./src:/app/src  # Mount local source code for development
+
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

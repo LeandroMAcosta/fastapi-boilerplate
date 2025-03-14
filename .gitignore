@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.env.*
+.env.local
+.venv
+env/
+venv/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# logs
+logs/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
