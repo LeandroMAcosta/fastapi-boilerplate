@@ -1,8 +1,8 @@
 from sqlalchemy.future import select
 
 from modules.base.repository import BaseRepository
-from modules.user.models import User
 from modules.user.exceptions import UserNotFoundException
+from modules.user.models import User
 
 
 class UserRepository(BaseRepository):
