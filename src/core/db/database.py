@@ -1,13 +1,14 @@
 from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
+from typing import AsyncGenerator
 
 from core.config import settings
 
 
 # This example assumes you store the sessionmaker in the app state during startup.
 # If not, you can import your sessionmaker directly.
-async def get_async_db(request: Request) -> AsyncSession:
+async def get_async_db(request: Request) -> AsyncGenerator[AsyncSession, None]:
     """
     Dependency that provides a database session.
     Retrieves the sessionmaker from the app state.

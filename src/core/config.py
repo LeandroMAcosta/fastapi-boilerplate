@@ -16,7 +16,7 @@ config = Config(str(env_path))
 
 class AppSettings(BaseSettings):
     APP_NAME: str = config("APP_NAME", default="FastAPI app")
-    APP_DESCRIPTION: str | None = config("APP_DESCRIPTION", default=None)
+    APP_DESCRIPTION: str = config("APP_DESCRIPTION", default="FastAPI app")
 
 
 class PostgresSettings(BaseSettings):
@@ -37,7 +37,7 @@ class EnvironmentOption(Enum):
 
 
 class EnvironmentSettings(BaseSettings):
-    ENVIRONMENT: EnvironmentOption = config("ENVIRONMENT", default="local")
+    ENVIRONMENT: EnvironmentOption = config("ENVIRONMENT", default=EnvironmentOption.LOCAL)
 
 
 class LoggingSettings(BaseSettings):

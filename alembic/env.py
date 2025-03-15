@@ -43,6 +43,9 @@ def run_migrations_offline() -> None:
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
     url = config.get_main_option("sqlalchemy.url")
+    if not url:
+        raise ValueError("Database URL not found in Alembic config")
+    
     connectable = create_engine(url, poolclass=pool.NullPool)
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)

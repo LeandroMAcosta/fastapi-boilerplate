@@ -12,4 +12,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         reload=settings.ENVIRONMENT != EnvironmentOption.PRODUCTION,
         workers=1,
+        factory=True,
     )

@@ -8,6 +8,7 @@ from passlib.context import CryptContext
 
 from core.config import settings
 from modules.user.models import User
+from modules.user.schemas import UserSchema
 from modules.user.service import UserService
 
 from .exceptions import InvalidCredentialsException
@@ -33,10 +34,14 @@ class AuthService:
         if not (username or email):
             raise InvalidCredentialsException()
 
+        user: User | None = None
         if username:
             user = await self.user_service.get_by_username(username)
         elif email:
             user = await self.user_service.get_by_email(email)
+
+        if not user:
+            raise InvalidCredentialsException()
 
         is_verified = self.verify_password(auth_user.password, user.hashed_password)
         if not is_verified:
@@ -44,7 +49,7 @@ class AuthService:
 
         return user
 
-    def register_user(self, new_user_request: RegisterRequest) -> User:
+    async def register_user(self, new_user_request: RegisterRequest) -> User:
         hashed_password = self.password_hashing.hash(new_user_request.password)
         new_user = User(
             name=new_user_request.name,
@@ -53,7 +58,7 @@ class AuthService:
             email=new_user_request.email,
             hashed_password=hashed_password,
         )
-        return self.user_service.create(new_user)
+        return await self.user_service.create(new_user)
 
     @staticmethod
     def create_access_token(user: User) -> str:
@@ -76,17 +81,17 @@ class AuthService:
             settings.JWT_SECRET,
             algorithm=settings.JWT_ALGORITHM,
         )
-        return access_token
+        return access_token.decode("utf-8")
 
     @staticmethod
-    def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
+    def get_current_user(token: str = Depends(oauth2_scheme)) -> UserSchema:
         """
         Get the current user from the request.
         """
         try:
             decoded_token = jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
             user_data = json.loads(decoded_token["sub"])
-            return user_data
+            return UserSchema(**user_data)
         except jwt.ExpiredSignatureError:
             raise HTTPException(status_code=401, detail="Token has expired")
         except (jwt.DecodeError, jwt.InvalidTokenError) as e:

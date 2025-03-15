@@ -2,6 +2,7 @@ from sqlalchemy.future import select
 
 from modules.base.repository import BaseRepository
 from modules.user.models import User
+from modules.user.exceptions import UserNotFoundException
 
 
 class UserRepository(BaseRepository):
@@ -25,38 +26,38 @@ class UserRepository(BaseRepository):
             await session.refresh(user)
             return user
 
-    async def fetch_by_username(self, username: str) -> list[User]:
+    async def fetch_by_username(self, username: str) -> User | None:
         """
-        Fetch users by username.
-        """
-        async with self.get_session() as session:
-            stmt = select(User).where(User.username == username)
-            result = await session.execute(stmt)
-            return result.scalars().all()
-
-    async def get_by_username(self, username: str) -> User | None:
-        """
-        Get a user by username.
+        Fetch a user by username. Returns None if not found.
         """
         async with self.get_session() as session:
             stmt = select(User).where(User.username == username)
             result = await session.execute(stmt)
             return result.scalars().first()
 
-    async def fetch_by_email(self, email: str) -> list[User]:
+    async def get_by_username(self, username: str) -> User:
         """
-        Fetch users by email.
+        Get a user by username. Raises UserNotFoundException if not found.
         """
-        async with self.get_session() as session:
-            stmt = select(User).where(User.email == email)
-            result = await session.execute(stmt)
-            return result.scalars().all()
+        user = await self.fetch_by_username(username)
+        if not user:
+            raise UserNotFoundException()
+        return user
 
-    async def get_by_email(self, email: str) -> User | None:
+    async def fetch_by_email(self, email: str) -> User | None:
         """
-        Get a user by email.
+        Fetch a user by email. Returns None if not found.
         """
         async with self.get_session() as session:
             stmt = select(User).where(User.email == email)
             result = await session.execute(stmt)
             return result.scalars().first()
+
+    async def get_by_email(self, email: str) -> User:
+        """
+        Get a user by email. Raises UserNotFoundException if not found.
+        """
+        user = await self.fetch_by_email(email)
+        if not user:
+            raise UserNotFoundException()
+        return user
