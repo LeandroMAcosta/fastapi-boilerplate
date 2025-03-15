@@ -1,5 +1,10 @@
 # FastAPI Application
 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+[![Type checking: mypy](https://img.shields.io/badge/type%20checking-mypy-blue.svg)](http://mypy-lang.org/)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
 This repository contains a FastAPI application with database integration, Docker support, authentication, and user management.
 
 ## Project Structure
@@ -130,4 +135,26 @@ pytest
 
 ## Project Development
 
-The `pyproject.toml` file contains configuration for Black code formatting.
+The project uses several tools to ensure code quality:
+
+- **Black**: For consistent code formatting (line length: 120)
+- **isort**: For standardized import ordering
+- **mypy**: For static type checking
+- **pre-commit**: For automated code quality checks
+
+### Pre-commit Setup
+
+1. Install pre-commit:
+```bash
+pip install pre-commit
+```
+
+2. Install the git hooks:
+```bash
+pre-commit install
+```
+
+3. (Optional) Run against all files:
+```bash
+pre-commit run --all-files
+```
