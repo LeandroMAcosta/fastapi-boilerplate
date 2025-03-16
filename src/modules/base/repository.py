@@ -24,6 +24,6 @@ class BaseRepository:
         try:
             yield self.session
             await self.session.commit()
-        except:
+        except Exception:
             await self.session.rollback()
             raise

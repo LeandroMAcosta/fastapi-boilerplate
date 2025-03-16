@@ -81,7 +81,7 @@ class AuthService:
             settings.JWT_SECRET,
             algorithm=settings.JWT_ALGORITHM,
         )
-        return access_token.decode("utf-8")
+        return str(access_token)
 
     @staticmethod
     def get_current_user(token: str = Depends(oauth2_scheme)) -> UserSchema:
