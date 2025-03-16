@@ -47,8 +47,10 @@ jobs:
         env:
           JWT_SECRET: "test"
           JWT_ALGORITHM: "HS256"
-
+        
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          # token: ${{ secrets.CODECOV_TOKEN }}  # for private repos
+          file: coverage.xml
+          fail_ci_if_error: true
