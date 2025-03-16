@@ -23,16 +23,16 @@ async def test_register_user(auth_service: AuthService):
     assert user.last_name == register_request.last_name
 
 
-# @pytest.mark.asyncio
-# async def test_authenticate_user_with_username(auth_service: AuthService, test_user: User):
-#     login_request = LoginRequest(
-#         username="testuser",
-#         password="password123"
-#     )
+@pytest.mark.asyncio
+async def test_authenticate_user_with_username(auth_service: AuthService, test_user: User):
+    login_request = LoginRequest(
+        username="testuser",
+        password="mypassword123"
+    )
 
-#     user = await auth_service.authenticate_user(login_request)
-#     assert user.id == test_user.id
-#     assert user.username == test_user.username
+    user = await auth_service.authenticate_user(login_request)
+    assert user.id == test_user.id
+    assert user.username == test_user.username
 
 
 @pytest.mark.asyncio
@@ -44,15 +44,15 @@ async def test_authenticate_user_with_email(auth_service: AuthService, test_user
     assert user.email == test_user.email
 
 
-# @pytest.mark.asyncio
-# async def test_authenticate_user_invalid_credentials(auth_service: AuthService):
-#     login_request = LoginRequest(
-#         username="testuser",
-#         password="wrongpassword"
-#     )
+@pytest.mark.asyncio
+async def test_authenticate_user_invalid_credentials(auth_service: AuthService):
+    login_request = LoginRequest(
+        username="testuser",
+        password="wrongpassword"
+    )
 
-#     with pytest.raises(InvalidCredentialsException):
-#         await auth_service.authenticate_user(login_request)
+    with pytest.raises(InvalidCredentialsException):
+        await auth_service.authenticate_user(login_request)
 
 
 @pytest.mark.asyncio

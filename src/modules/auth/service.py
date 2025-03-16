@@ -36,9 +36,9 @@ class AuthService:
 
         user: User | None = None
         if username:
-            user = await self.user_service.get_by_username(username)
+            user = await self.user_service.fetch_by_username(username)
         elif email:
-            user = await self.user_service.get_by_email(email)
+            user = await self.user_service.fetch_by_email(email)
 
         if not user:
             raise InvalidCredentialsException()

@@ -19,7 +19,7 @@ POSTGRES_URL = os.getenv("POSTGRES_URL")
 if not POSTGRES_URL:
     raise ValueError("❌ DATABASE URL is not set. Check your environment variables.")
 
-config = context.config
+config = context.config  # type: ignore
 config.set_main_option("sqlalchemy.url", POSTGRES_URL)
 
 # ✅ Ensure `Base.metadata` is assigned correctly
