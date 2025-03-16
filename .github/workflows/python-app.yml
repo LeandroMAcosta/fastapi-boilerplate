@@ -43,7 +43,7 @@ jobs:
       - name: Run tests
         run: |
           cd tests
-          pytest --cov=src --cov-report=xml:../coverage.xml
+          pytest --cov=. --cov-report=xml:../coverage.xml
         env:
           JWT_SECRET: "test"
           JWT_ALGORITHM: "HS256"
