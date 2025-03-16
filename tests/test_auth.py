@@ -25,10 +25,7 @@ async def test_register_user(auth_service: AuthService):
 
 @pytest.mark.asyncio
 async def test_authenticate_user_with_username(auth_service: AuthService, test_user: User):
-    login_request = LoginRequest(
-        username="testuser",
-        password="mypassword123"
-    )
+    login_request = LoginRequest(username="testuser", password="mypassword123")
 
     user = await auth_service.authenticate_user(login_request)
     assert user.id == test_user.id
@@ -46,10 +43,7 @@ async def test_authenticate_user_with_email(auth_service: AuthService, test_user
 
 @pytest.mark.asyncio
 async def test_authenticate_user_invalid_credentials(auth_service: AuthService):
-    login_request = LoginRequest(
-        username="testuser",
-        password="wrongpassword"
-    )
+    login_request = LoginRequest(username="testuser", password="wrongpassword")
 
     with pytest.raises(InvalidCredentialsException):
         await auth_service.authenticate_user(login_request)

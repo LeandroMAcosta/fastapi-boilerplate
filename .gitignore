@@ -27,3 +27,9 @@ logs/
 
 # Cython debug symbols
 cython_debug/
+
+
+# coverage
+coverage.xml
+.coverage
+htmlcov/
