@@ -26,6 +26,7 @@ jobs:
           pip install black isort pytest mypy
           pip install types-PyJWT
           pip install pytest-cov
+          pip install PyJWT
 
       - name: Check code formatting with Black
         run: |
