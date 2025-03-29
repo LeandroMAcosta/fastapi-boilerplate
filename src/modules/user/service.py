@@ -3,9 +3,9 @@ from typing import Optional
 from fastapi import Depends
 from pydantic import EmailStr
 
+from modules.user.exceptions import UserAlreadyExistsException
 from modules.user.models import User
 from modules.user.repository import UserRepository
-from modules.user.exceptions import UserAlreadyExistsException
 
 
 class UserService:
@@ -20,7 +20,7 @@ class UserService:
         existing_user = await self.fetch_by_email(user.email)
         if existing_user:
             raise UserAlreadyExistsException(field="email")
-        
+
         existing_user = await self.fetch_by_username(user.username)
         if existing_user:
             raise UserAlreadyExistsException(field="username")

@@ -1,18 +1,15 @@
-from fastapi import Depends
-from google.oauth2 import id_token
-from google.auth.transport import requests
-from typing import Optional
 import httpx
+from fastapi import Depends
+from google.auth.transport import requests
+from google.oauth2 import id_token
 
 from core.config import settings
-from modules.user.service import UserService
 from modules.user.models import User
+from modules.user.service import UserService
+
 
 class GoogleAuthService:
-    def __init__(
-        self, 
-        user_service: UserService = Depends()
-    ):
+    def __init__(self, user_service: UserService = Depends()):
         self.user_service = user_service
         self.client_id = settings.GOOGLE_CLIENT_ID
         self.client_secret = settings.GOOGLE_CLIENT_SECRET
@@ -28,7 +25,7 @@ class GoogleAuthService:
             "scope=email profile"
         )
 
-    async def verify_google_token(self, code: str) -> Optional[User]:
+    async def verify_google_token(self, code: str) -> User:
         """Exchange auth code for tokens and verify user info"""
         # Exchange code for tokens
         token_url = "https://oauth2.googleapis.com/token"
@@ -37,7 +34,7 @@ class GoogleAuthService:
             "client_id": self.client_id,
             "client_secret": self.client_secret,
             "redirect_uri": self.redirect_uri,
-            "grant_type": "authorization_code"
+            "grant_type": "authorization_code",
         }
 
         async with httpx.AsyncClient() as client:
@@ -46,15 +43,11 @@ class GoogleAuthService:
             tokens = token_response.json()
 
         # Verify ID token
-        id_info = id_token.verify_oauth2_token(
-            tokens["id_token"], 
-            requests.Request(), 
-            self.client_id
-        )
+        id_info = id_token.verify_oauth2_token(tokens["id_token"], requests.Request(), self.client_id)
 
         # Check if user exists
         user = await self.user_service.fetch_by_email(id_info["email"])
-        
+
         if not user:
             # Create new user if doesn't exist
             user = User(
@@ -62,8 +55,8 @@ class GoogleAuthService:
                 name=id_info.get("given_name", ""),
                 last_name=id_info.get("family_name", ""),
                 username=id_info["email"].split("@")[0],  # Use email prefix as username
-                hashed_password=""  # Empty as Google auth doesn't need password
+                hashed_password="",  # Empty as Google auth doesn't need password
             )
             user = await self.user_service.create(user)
 
-        return user 
+        return user

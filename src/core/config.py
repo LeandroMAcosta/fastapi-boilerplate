@@ -58,7 +58,7 @@ class LoggingSettings(BaseSettings):
     JWT_SECRET: str = config("JWT_SECRET")
     JWT_ALGORITHM: str = config("JWT_ALGORITHM", default="HS256")
     JWT_EXPIRATION_TIME: int = config("JWT_EXPIRATION", cast=int, default=15)
-    
+
     # Add these new settings
     GOOGLE_CLIENT_ID: str = config("GOOGLE_CLIENT_ID")
     GOOGLE_CLIENT_SECRET: str = config("GOOGLE_CLIENT_SECRET")

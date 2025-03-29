@@ -7,6 +7,7 @@ class UserNotFoundException(HTTPException):
     def __init__(self) -> None:
         super().__init__(detail="User not found", status_code=404)
 
+
 class UserAlreadyExistsException(HTTPException):
     def __init__(self, field: str):
         self.field = field
