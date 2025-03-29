@@ -21,3 +21,7 @@ class UserSchema(UserBase):
     id: int
     name: str
     last_name: str
+
+    model_config = {
+        "from_attributes": True
+    }
