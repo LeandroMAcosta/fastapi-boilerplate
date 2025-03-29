@@ -5,6 +5,7 @@ from pydantic import EmailStr
 
 from modules.user.models import User
 from modules.user.repository import UserRepository
+from modules.user.exceptions import UserAlreadyExistsException
 
 
 class UserService:
@@ -16,6 +17,14 @@ class UserService:
         return await self.user_repo.get_by_id(user_id)
 
     async def create(self, user: User) -> User:
+        existing_user = await self.fetch_by_email(user.email)
+        if existing_user:
+            raise UserAlreadyExistsException(field="email")
+        
+        existing_user = await self.fetch_by_username(user.username)
+        if existing_user:
+            raise UserAlreadyExistsException(field="username")
+
         return await self.user_repo.create(user)
 
     async def fetch_by_username(self, username: str) -> Optional[User]:
